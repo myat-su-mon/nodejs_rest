@@ -1,4 +1,6 @@
 const Post = require("../models/post");
+const fs = require("fs");
+const path = require("path");
 const { validationResult } = require("express-validator");
 
 exports.getPosts = (req, res, next) => {
@@ -87,6 +89,7 @@ exports.updatePost = (req, res, next) => {
   const title = req.body.title;
   const content = req.body.content;
   let imageUrl = req.body.image;
+
   if (req.file) {
     imageUrl = req.file.path.replace("\\", "/");
   }
@@ -104,6 +107,15 @@ exports.updatePost = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
+      if (imageUrl !== post.imageUrl) {
+      }
+      post.title = title;
+      post.imageUrl = imageUrl;
+      post.content = content;
+      return post.save();
+    })
+    .then((result) => {
+      res.status(200).json({ message: "Post updated!", post: result });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -111,4 +123,9 @@ exports.updatePost = (req, res, next) => {
       }
       next(err);
     });
+};
+
+const clearImage = (filePath) => {
+  filePath = path.join(__dirname, "..", filePath);
+  fs.unlink(filePath, (err) => console.log(err));
 };
