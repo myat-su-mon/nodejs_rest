@@ -19,7 +19,6 @@ app.use((req, res, next) => {
 });
 
 app.use("/feed", feedRoutes);
-app.listen(8080);
 
 mongoose
   .connect(
