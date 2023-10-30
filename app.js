@@ -3,8 +3,28 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const feedRoutes = require("./routes/feed");
 const mongoose = require("mongoose");
+const multer = require("multer");
+const uuid = require("uuid");
 
 const app = express();
+
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  filename: (req, file, cb) => {
+    // cb(null, uuid.v4() + "-" + file.originalname);
+    cb(null, new Date().toISOString() + "-" + file.originalname);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === "image/png" || "image/jpg" || "image/jpeg") {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
 
 // app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.json());
