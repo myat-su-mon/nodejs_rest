@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const feedRoutes = require("./routes/feed");
+const mongoose = require("mongoose");
 
 const app = express();
 
@@ -19,3 +20,19 @@ app.use((req, res, next) => {
 
 app.use("/feed", feedRoutes);
 app.listen(8080);
+
+mongoose
+  .connect(
+    "mongodb+srv://root:root@cluster0.j30ddxo.mongodb.net/messages?retryWrites=true&w=majority",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  .then((result) => {
+    console.log("connected");
+    app.listen(8080);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
