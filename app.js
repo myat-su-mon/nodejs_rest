@@ -6,6 +6,7 @@ const authRoutes = require("./routes/auth");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const uuid = require("uuid");
+const cors = require("cors");
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use((req, res, next) => {
     "GET, POST, PUT, PATCH, DELETE"
   );
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", true);
   next();
 });
 
@@ -63,7 +65,12 @@ mongoose
   .then((result) => {
     console.log("connected");
     const server = app.listen(8080);
-    const io = require("socket.io")(server);
+    const io = require("socket.io")(server, {
+      cors: {
+        origin: "https://localhost:3000",
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+      },
+    });
     io.on("connection", (socket) => {
       console.log("Client connected");
     });
