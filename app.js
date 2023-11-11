@@ -1,14 +1,16 @@
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
-const feedRoutes = require("./routes/feed");
-const authRoutes = require("./routes/auth");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const uuid = require("uuid");
 const cors = require("cors");
+const helmet = require("helmet");
 
 const app = express();
+
+const feedRoutes = require("./routes/feed");
+const authRoutes = require("./routes/auth");
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -28,6 +30,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+// app.use(helmet());
 // app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.json());
 app.use("/images/", express.static(path.join(__dirname, "images")));
