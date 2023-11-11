@@ -6,6 +6,7 @@ const multer = require("multer");
 const uuid = require("uuid");
 const cors = require("cors");
 const helmet = require("helmet");
+const compression = require("compression");
 
 const app = express();
 
@@ -30,7 +31,8 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// app.use(helmet());
+app.use(helmet());
+app.use(compression());
 // app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.json());
 app.use("/images/", express.static(path.join(__dirname, "images")));
