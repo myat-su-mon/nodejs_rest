@@ -1,0 +1,7 @@
+{
+  "env": {
+    "MONGODB_USER": "root",
+    "MONGODB_PASSWORD": "root",
+    "MONGO_DEFAULT_DATABASE": "shop"
+  }
+}

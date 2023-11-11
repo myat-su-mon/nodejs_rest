@@ -54,17 +54,16 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: message, data: data });
 });
 
+const MONGODB_URI = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@cluster0.j30ddxo.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`;
+
 mongoose
-  .connect(
-    "mongodb+srv://root:root@cluster0.j30ddxo.mongodb.net/messages?retryWrites=true&w=majority",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
+  .connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then((result) => {
     console.log("connected");
-    const server = app.listen(8080);
+    const server = app.listen(process.env.PORT || 8080);
     const io = require("./socket").init(server);
     io.on("connection", (socket) => {
       console.log("Client connected");
